@@ -377,6 +377,165 @@ This is a fantastic foundation to build upon.
 
 Our next topic is **Containerizing Applications with Docker**. This is where things get really creative. We'll move from using pre-built images like `alpine` to building your very own custom image for an application using a `Dockerfile`.
 
+## What is a Dockerfile?
+
+A **`Dockerfile`** is simply a text file that contains a list of instructions, like a recipe. Each instruction tells Docker how to assemble your application into a custom image, step-by-step. Docker reads this file from top to bottom and executes each command to create the final image.
+
+---
+
+## Our First Project: A Simple Web App
+
+We're going to containerize a very simple Python web application. Don't worry if you don't know Python; the concepts apply to any programming language.
+
+Our goal is to create an image that runs a web server displaying "Hello from your first Docker App!".
+
+First, create a new folder on your computer for this project. Call it something like `docker-hello`. Inside this folder, you'll need to create two files:
+
+1. **`app.py`** (Our application code)
+```
+    from flask import Flask
+    
+    app = Flask(__name__)
+    
+    @app.route('/')
+    def hello():
+        return "<h1>Hello from your first Docker App!</h1>"
+    
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=5000)
+```
+    
+2. **`requirements.txt`** (Our app's dependencies)
+    
+    ```
+    Flask==2.0.1
+    ```
+    
+
+---
+
+## Writing the Dockerfile
+
+Now, inside that same `docker-hello` folder, create the most important file: `Dockerfile` (no extension, just that name).
+
+This file will tell Docker how to build our image. Add the following content to it:
+
+Dockerfile
+
+```
+# 1. Start from an official Python base image
+FROM python:3.9-slim
+
+# 2. Set the working directory inside the container
+WORKDIR /app
+
+# 3. Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# 4. Copy the rest of the application code
+COPY . .
+
+# 5. Expose the port the app runs on
+EXPOSE 5000
+
+# 6. Define the command to run the application
+CMD ["python", "app.py"]
+```
+
+Go ahead and create your `docker-hello` folder with these three files inside: `app.py`, `requirements.txt`, and `Dockerfile`.
 
 
+The `.` (dot) in the `COPY requirements.txt .` command means **"copy it to the current working directory inside the container."**
+
+---
+### The Role of `WORKDIR`
+
+The key is the instruction that comes right before it in our `Dockerfile`:
+
+Dockerfile
+
+```
+WORKDIR /app
+```
+
+This command does two things:
+
+1. If the `/app` directory doesn't exist inside the container, it creates it.
+    
+2. It sets this directory as the current working directory. Think of it as running the `cd /app` command inside your container for all subsequent instructions.
+    
+
+---
+
+### Putting It Together
+
+So, when Docker processes your file, here's the sequence of events:
+
+1. **`WORKDIR /app`**: Docker "steps into" the `/app` directory inside the container.
+    
+2. **`COPY requirements.txt .`**: Docker now copies the `requirements.txt` file from your project folder on your computer (the build context) directly into the `/app` directory inside the container (because that's where it's "currently standing").
+    
+
+So, after that line runs, the file path inside the container will be `/app/requirements.txt`.
+
+Now for the exciting part: bringing your application to life. We'll do this in two steps: building the image from your `Dockerfile`, and then running a container from that new image.
+
+---
+
+## Step 1: Build Your Custom Image
+
+Navigate your terminal into the `docker-hello` folder you created. This is crucial because the `.` at the end of the next command tells Docker to look for the `Dockerfile` in your current directory.
+
+Run the following `docker build` command:
+
+Bash
+
+```
+docker build -t my-first-app .
+```
+
+Let's break that down:
+
+- `docker build`: The command to build an image from a `Dockerfile`.
+    
+- `-t my-first-app`: The `-t` flag stands for "tag." It gives your new image a memorable name, in this case, `my-first-app`.
+    
+- `.`: This tells Docker that the build context (your `Dockerfile` and application files) is in the current directory.
+    
+
+You will see Docker go through each step in your `Dockerfile`, creating a layer for each instruction.
+
+---
+
+## Step 2: Run Your Application
+
+Once the build is complete, you have a new image ready to go. Now, run it using the `docker run` command, with one important new flag: `-p`.
+
+Bash
+
+```
+docker run -p 5000:5000 my-first-app
+```
+
+Here’s the breakdown:
+
+- `docker run`: The command to start a container.
+    
+- `-p 5000:5000`: This is **port mapping**. It connects your computer's port (the first `5000`) to the container's internal port (the second `5000`). This is what lets you access the web app running inside the container from your browser.
+    
+- `my-first-app`: The name of the image you just built.
+    
+
+---
+
+## Step 3: See It in Action!
+
+After running the command, your terminal will look like it's "stuck," but that's a good sign! It means your web server is running.
+
+Now, open your web browser and go to this address:
+
+**`http://localhost:5000`**
+
+You should see your message: "Hello from your first Docker App!".
 
