@@ -306,5 +306,77 @@ docker ps -a
 
 Now you'll see your container listed, along with a status like "Exited (0) ... ago". This confirms you created and ran a container.
 
+- `docker ps` = Shows only the **currently running** containers.
+    
+- `docker ps -a` = Shows **all** containers, both running and exited.
+    
+
+---
+
+## Running a Container in the Background
+
+Our last container stopped immediately because its job was done. But what if you want to run a container that keeps running in the background, like a web server or a database?
+
+For this, we use the **detached mode** flag: `-d`.
+
+Let's try running a container that continuously "pings" an address. This process won't finish, so the container will stay alive.
+
+Run this command:
+
+Bash
+
+```
+docker run -d alpine ping 8.8.8.8
+```
+
+This time, Docker will print a very long string of characters. This is the unique **Container ID**. The container is now running in the background.
+
+Now, check your running containers again:
+
+Bash
+
+```
+docker ps
+```
+
+You should now see your `alpine` container running, with the command `ping 8.8.8.8`.
+
+---
+
+## Cleaning Up: Stopping and Removing a Container
+
+To stop the container from running, you use the `docker stop` command with the first few unique characters of its Container ID.
+
+1. **Stop the container:**
+    ```
+    # Replace '123abcde' with the first few characters of YOUR container ID
+    docker stop 123abcde 
+    ```
+    
+2. **Remove the container:** A stopped container still exists. To permanently remove it, use `docker rm`.
+```
+ docker rm 123abcde
+```
+
+we've just mastered the fundamental lifecycle of a Docker container: pulling an image, running it, checking its status, stopping it, and finally, removing it. That's a huge milestone.
+
+You've covered all the core concepts of **Docker Fundamentals**:
+
+- Why we need Docker (the "it works on my machine" problem).
+    
+- The difference between an **Image** (a blueprint) and a **Container** (a running instance).
+    
+- Docker's efficient layered architecture.
+    
+- The essential commands like `run`, `ps`, `stop`, and `rm`.
+    
+
+This is a fantastic foundation to build upon.
+
+---
+
+Our next topic is **Containerizing Applications with Docker**. This is where things get really creative. We'll move from using pre-built images like `alpine` to building your very own custom image for an application using a `Dockerfile`.
+
+
 
 
