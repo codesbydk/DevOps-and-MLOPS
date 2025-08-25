@@ -222,3 +222,379 @@ This layered approach provides three huge benefits:
     
 
 In short, the layered architecture is a clever design that makes building, storing, and sharing images remarkably fast and lightweight.
+
+### **Step 1: Pull the `alpine` Image**
+
+First, let's download the `alpine` image from Docker Hub to your local machine. It's a tiny but complete Linux operating system, perfect for testing.
+
+Go to your terminal and run this command:
+
+Bash
+
+```
+docker pull alpine
+```
+
+You should see output showing that Docker is downloading the image, often displaying the progress for each layer.
+
+### **Step 2: List Your Local Images**
+
+Next, let's verify that the image was successfully downloaded. To see all the images on your computer, run this command:
+
+Bash
+
+```
+docker images
+```
+
+The output will be a table that should now include an entry for `alpine`, showing its tag, ID, and small size.
+
+pulled an image, which is the first major step. Now you have a blueprint ready to go.
+
+The next logical step is to use that blueprint (**image**) to create an actual running instance (a **container**).
+
+---
+
+## From Image to Container: `docker run`
+
+The `docker run` command is the most important one in Docker. It creates a new container from a specified image and then starts it.
+
+Let's run a container from our `alpine` image. We'll also tell the container to execute a simple command for us: `ls -l`, which lists the files in the root directory _inside_ the container.
+
+In your terminal, run this:
+
+Bash
+
+```
+docker run alpine ls -l
+```
+
+You'll see a list of directories like `bin`, `etc`, `home`, and `usr`. This is the filesystem _inside_ the Alpine Linux container, not on your own machine.
+
+Here's what just happened:
+
+1. Docker created a new container from the `alpine` image.
+    
+2. It ran the command `ls -l` inside that container.
+    
+3. After the command finished, the container stopped because it had nothing else to do.
+    
+
+---
+
+## Checking on Your Containers: `docker ps`
+
+So, where did the container go? The `docker ps` command shows you all the containers that are currently **running**.
+
+Try it now:
+
+Bash
+
+```
+docker ps
+```
+
+You'll likely see an empty list. This is because our container stopped as soon as its `ls -l` job was done.
+
+To see **all** containers, including stopped ones, you need to add the `-a` flag.
+
+Bash
+
+```
+docker ps -a
+```
+
+Now you'll see your container listed, along with a status like "Exited (0) ... ago". This confirms you created and ran a container.
+
+- `docker ps` = Shows only the **currently running** containers.
+    
+- `docker ps -a` = Shows **all** containers, both running and exited.
+    
+
+---
+
+## Running a Container in the Background
+
+Our last container stopped immediately because its job was done. But what if you want to run a container that keeps running in the background, like a web server or a database?
+
+For this, we use the **detached mode** flag: `-d`.
+
+Let's try running a container that continuously "pings" an address. This process won't finish, so the container will stay alive.
+
+Run this command:
+
+Bash
+
+```
+docker run -d alpine ping 8.8.8.8
+```
+
+This time, Docker will print a very long string of characters. This is the unique **Container ID**. The container is now running in the background.
+
+Now, check your running containers again:
+
+Bash
+
+```
+docker ps
+```
+
+You should now see your `alpine` container running, with the command `ping 8.8.8.8`.
+
+---
+
+## Cleaning Up: Stopping and Removing a Container
+
+To stop the container from running, you use the `docker stop` command with the first few unique characters of its Container ID.
+
+1. **Stop the container:**
+    ```
+    # Replace '123abcde' with the first few characters of YOUR container ID
+    docker stop 123abcde 
+    ```
+    
+2. **Remove the container:** A stopped container still exists. To permanently remove it, use `docker rm`.
+```
+ docker rm 123abcde
+```
+
+we've just mastered the fundamental lifecycle of a Docker container: pulling an image, running it, checking its status, stopping it, and finally, removing it. That's a huge milestone.
+
+You've covered all the core concepts of **Docker Fundamentals**:
+
+- Why we need Docker (the "it works on my machine" problem).
+    
+- The difference between an **Image** (a blueprint) and a **Container** (a running instance).
+    
+- Docker's efficient layered architecture.
+    
+- The essential commands like `run`, `ps`, `stop`, and `rm`.
+    
+
+This is a fantastic foundation to build upon.
+
+---
+
+Our next topic is **Containerizing Applications with Docker**. This is where things get really creative. We'll move from using pre-built images like `alpine` to building your very own custom image for an application using a `Dockerfile`.
+
+## What is a Dockerfile?
+
+A **`Dockerfile`** is simply a text file that contains a list of instructions, like a recipe. Each instruction tells Docker how to assemble your application into a custom image, step-by-step. Docker reads this file from top to bottom and executes each command to create the final image.
+
+---
+
+## Our First Project: A Simple Web App
+
+We're going to containerize a very simple Python web application. Don't worry if you don't know Python; the concepts apply to any programming language.
+
+Our goal is to create an image that runs a web server displaying "Hello from your first Docker App!".
+
+First, create a new folder on your computer for this project. Call it something like `docker-hello`. Inside this folder, you'll need to create two files:
+
+1. **`app.py`** (Our application code)
+```
+    from flask import Flask
+    
+    app = Flask(__name__)
+    
+    @app.route('/')
+    def hello():
+        return "<h1>Hello from your first Docker App!</h1>"
+    
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=5000)
+```
+    
+2. **`requirements.txt`** (Our app's dependencies)
+    
+    ```
+    Flask==2.0.1
+    ```
+    
+
+---
+
+## Writing the Dockerfile
+
+Now, inside that same `docker-hello` folder, create the most important file: `Dockerfile` (no extension, just that name).
+
+This file will tell Docker how to build our image. Add the following content to it:
+
+Dockerfile
+
+```
+# 1. Start from an official Python base image
+FROM python:3.9-slim
+
+# 2. Set the working directory inside the container
+WORKDIR /app
+
+# 3. Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# 4. Copy the rest of the application code
+COPY . .
+
+# 5. Expose the port the app runs on
+EXPOSE 5000
+
+# 6. Define the command to run the application
+CMD ["python", "app.py"]
+```
+
+Go ahead and create your `docker-hello` folder with these three files inside: `app.py`, `requirements.txt`, and `Dockerfile`.
+
+
+The `.` (dot) in the `COPY requirements.txt .` command means **"copy it to the current working directory inside the container."**
+
+---
+### The Role of `WORKDIR`
+
+The key is the instruction that comes right before it in our `Dockerfile`:
+
+Dockerfile
+
+```
+WORKDIR /app
+```
+
+This command does two things:
+
+1. If the `/app` directory doesn't exist inside the container, it creates it.
+    
+2. It sets this directory as the current working directory. Think of it as running the `cd /app` command inside your container for all subsequent instructions.
+    
+
+---
+
+### Putting It Together
+
+So, when Docker processes your file, here's the sequence of events:
+
+1. **`WORKDIR /app`**: Docker "steps into" the `/app` directory inside the container.
+    
+2. **`COPY requirements.txt .`**: Docker now copies the `requirements.txt` file from your project folder on your computer (the build context) directly into the `/app` directory inside the container (because that's where it's "currently standing").
+    
+
+So, after that line runs, the file path inside the container will be `/app/requirements.txt`.
+
+Now for the exciting part: bringing your application to life. We'll do this in two steps: building the image from your `Dockerfile`, and then running a container from that new image.
+
+---
+
+## Step 1: Build Your Custom Image
+
+Navigate your terminal into the `docker-hello` folder you created. This is crucial because the `.` at the end of the next command tells Docker to look for the `Dockerfile` in your current directory.
+
+Run the following `docker build` command:
+
+Bash
+
+```
+docker build -t my-first-app .
+```
+
+Let's break that down:
+
+- `docker build`: The command to build an image from a `Dockerfile`.
+    
+- `-t my-first-app`: The `-t` flag stands for "tag." It gives your new image a memorable name, in this case, `my-first-app`.
+    
+- `.`: This tells Docker that the build context (your `Dockerfile` and application files) is in the current directory.
+    
+
+You will see Docker go through each step in your `Dockerfile`, creating a layer for each instruction.
+
+---
+
+## Step 2: Run Your Application
+
+Once the build is complete, you have a new image ready to go. Now, run it using the `docker run` command, with one important new flag: `-p`.
+
+Bash
+
+```
+docker run -p 5000:5000 my-first-app
+```
+
+Here’s the breakdown:
+
+- `docker run`: The command to start a container.
+    
+- `-p 5000:5000`: This is **port mapping**. It connects your computer's port (the first `5000`) to the container's internal port (the second `5000`). This is what lets you access the web app running inside the container from your browser.
+    
+- `my-first-app`: The name of the image you just built.
+    
+
+---
+
+## Step 3: See It in Action!
+
+After running the command, your terminal will look like it's "stuck," but that's a good sign! It means your web server is running.
+
+Now, open your web browser and go to this address:
+
+**`http://localhost:5000`**
+
+You should see your message: "Hello from your first Docker App!".
+
+
+But we might have faced a error saying "ImportError: cannot import name 'url_quote' from 'werkzeug.urls'"
+
+This is a classic dependency version mismatch error, and it's a perfect example of why Docker is so useful for preventing these kinds of problems! Don't worry, this is a very common issue and easy to fix.
+
+The error `ImportError: cannot import name 'url_quote' from 'werkzeug.urls'` happens because the version of **Flask** (`2.0.1`) you specified is trying to use a function that no longer exists in a newer version of its dependency, **Werkzeug**.
+
+---
+
+## The Solution
+
+We just need to update the version of Flask in your `requirements.txt` file to a more recent one that is compatible with the latest version of Werkzeug.
+
+1. **Stop the running container.** Go to the terminal where the container is running and press `Ctrl + C`.
+    
+2. **Update `requirements.txt`**. Change the content of your `requirements.txt` file to a newer version of Flask. Let's use version `2.3.2`, which is known to be stable.
+    
+    ```
+    Flask==2.3.2
+    ```
+    
+3. **Rebuild your image.** Since you've changed a file, you need to rebuild the image so your changes are included. Docker is smart and will use the cache for the unchanged layers, so it will be very fast.
+    
+    Bash
+    
+    ```
+    docker build -t my-first-app .
+    ```
+    
+4. **Run the container again.** Now run the container using the newly built image.
+    
+    Bash
+    
+    ```
+    docker run -p 5000:5000 my-first-app
+    ```
+    
+
+Now, try accessing `http://localhost:5000` in your browser again. It should work perfectly.
+
+This experience highlights a key reason for specifying exact versions in a `requirements.txt` file: it creates a predictable, repeatable environment, which is the core goal of using Docker.
+
+Congratulations on building your first custom Docker image and running a containerized web application. 🥳
+
+You've not only successfully written a `Dockerfile` but also diagnosed and fixed a real-world dependency issue. That's a huge step.
+
+To recap, in this section you've learned:
+
+- How to write a `Dockerfile` as a recipe for your application.
+    
+- What key instructions like `FROM`, `WORKDIR`, `COPY`, and `RUN` do.
+    
+- How to build a custom image using `docker build -t`.
+    
+- How to run your application and expose it to the world with `docker run -p`.
+    
+
+Before we move on, go to the terminal where your app is running and press **`Ctrl + C`** to stop the container.
+
