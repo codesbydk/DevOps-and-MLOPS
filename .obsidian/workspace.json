@@ -1,0 +1,223 @@
+{
+  "main": {
+    "id": "e36aa64d3754f1f6",
+    "type": "split",
+    "children": [
+      {
+        "id": "8c3faae1fe1ef0cd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3351091670373f42",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          },
+          {
+            "id": "df06fad17793b76e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Docker.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Docker"
+            }
+          },
+          {
+            "id": "16bf761ef8667a11",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Docker cheatsheet.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Docker cheatsheet"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "bfbc77700fb1539d",
+    "type": "split",
+    "children": [
+      {
+        "id": "489099cd2fb46cd5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "450e5c2aeeefee12",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "e367d1a784aa5134",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "b0eb932a1363425e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "27f3ffadb7de6b27",
+    "type": "split",
+    "children": [
+      {
+        "id": "9dc9a331e1577983",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c021462d9d2a6e1e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Readme.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Readme"
+            }
+          },
+          {
+            "id": "dbbf654a5f1048e7",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Readme.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Readme"
+            }
+          },
+          {
+            "id": "546a52df93c7cfde",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "08eb5f9e4c5cc74f",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Readme.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Readme"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:Create new base": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "450e5c2aeeefee12",
+  "lastOpenFiles": [
+    "congif",
+    "id_rsa_codesbydk.pub",
+    "id_rsa_codesbydk",
+    "Docker cheatsheet.md",
+    "Docker.md",
+    "ML Engineer.md",
+    "ML Basics.md",
+    "Math.md",
+    "Fine Tuning.md",
+    "DevOps.md",
+    "API.md",
+    "Cheat sheets.md",
+    "Python.md",
+    "Readme.md",
+    "MLOPS.md",
+    "Cloud.md",
+    "Azure.md",
+    "Fast API.md",
+    "Database.md",
+    "MongoDB.md",
+    "MySQL.md",
+    "AI Engineer.md",
+    "Tools.md",
+    "Azure DevOps.md",
+    "Terraform.md",
+    "AI Agents.md",
+    "Gen AI.md",
+    "Data Structures.md"
+  ]
+}

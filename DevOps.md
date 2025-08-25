@@ -1,0 +1,12 @@
+1. [[Basics]]
+2. [[Azure]]
+3. [[Docker]]
+4. [[K8s]]
+5. [[Helm]]
+6. [[Ansible]]
+7. [[Terraform]]
+8. [[Jenkins]]
+9. [[Prometheus]]
+10. [[Argo CD]]
+11. [[GitHub Actions]]
+
