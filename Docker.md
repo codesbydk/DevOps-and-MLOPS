@@ -539,3 +539,46 @@ Now, open your web browser and go to this address:
 
 You should see your message: "Hello from your first Docker App!".
 
+
+But we might have faced a error saying "ImportError: cannot import name 'url_quote' from 'werkzeug.urls'"
+
+This is a classic dependency version mismatch error, and it's a perfect example of why Docker is so useful for preventing these kinds of problems! Don't worry, this is a very common issue and easy to fix.
+
+The error `ImportError: cannot import name 'url_quote' from 'werkzeug.urls'` happens because the version of **Flask** (`2.0.1`) you specified is trying to use a function that no longer exists in a newer version of its dependency, **Werkzeug**.
+
+---
+
+## The Solution
+
+We just need to update the version of Flask in your `requirements.txt` file to a more recent one that is compatible with the latest version of Werkzeug.
+
+1. **Stop the running container.** Go to the terminal where the container is running and press `Ctrl + C`.
+    
+2. **Update `requirements.txt`**. Change the content of your `requirements.txt` file to a newer version of Flask. Let's use version `2.3.2`, which is known to be stable.
+    
+    ```
+    Flask==2.3.2
+    ```
+    
+3. **Rebuild your image.** Since you've changed a file, you need to rebuild the image so your changes are included. Docker is smart and will use the cache for the unchanged layers, so it will be very fast.
+    
+    Bash
+    
+    ```
+    docker build -t my-first-app .
+    ```
+    
+4. **Run the container again.** Now run the container using the newly built image.
+    
+    Bash
+    
+    ```
+    docker run -p 5000:5000 my-first-app
+    ```
+    
+
+Now, try accessing `http://localhost:5000` in your browser again. It should work perfectly.
+
+This experience highlights a key reason for specifying exact versions in a `requirements.txt` file: it creates a predictable, repeatable environment, which is the core goal of using Docker.
+
+
