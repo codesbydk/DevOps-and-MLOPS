@@ -581,4 +581,20 @@ Now, try accessing `http://localhost:5000` in your browser again. It should work
 
 This experience highlights a key reason for specifying exact versions in a `requirements.txt` file: it creates a predictable, repeatable environment, which is the core goal of using Docker.
 
+Congratulations on building your first custom Docker image and running a containerized web application. 🥳
+
+You've not only successfully written a `Dockerfile` but also diagnosed and fixed a real-world dependency issue. That's a huge step.
+
+To recap, in this section you've learned:
+
+- How to write a `Dockerfile` as a recipe for your application.
+    
+- What key instructions like `FROM`, `WORKDIR`, `COPY`, and `RUN` do.
+    
+- How to build a custom image using `docker build -t`.
+    
+- How to run your application and expose it to the world with `docker run -p`.
+    
+
+Before we move on, go to the terminal where your app is running and press **`Ctrl + C`** to stop the container.
 
