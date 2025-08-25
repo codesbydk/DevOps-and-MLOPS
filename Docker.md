@@ -222,3 +222,89 @@ This layered approach provides three huge benefits:
     
 
 In short, the layered architecture is a clever design that makes building, storing, and sharing images remarkably fast and lightweight.
+
+### **Step 1: Pull the `alpine` Image**
+
+First, let's download the `alpine` image from Docker Hub to your local machine. It's a tiny but complete Linux operating system, perfect for testing.
+
+Go to your terminal and run this command:
+
+Bash
+
+```
+docker pull alpine
+```
+
+You should see output showing that Docker is downloading the image, often displaying the progress for each layer.
+
+### **Step 2: List Your Local Images**
+
+Next, let's verify that the image was successfully downloaded. To see all the images on your computer, run this command:
+
+Bash
+
+```
+docker images
+```
+
+The output will be a table that should now include an entry for `alpine`, showing its tag, ID, and small size.
+
+pulled an image, which is the first major step. Now you have a blueprint ready to go.
+
+The next logical step is to use that blueprint (**image**) to create an actual running instance (a **container**).
+
+---
+
+## From Image to Container: `docker run`
+
+The `docker run` command is the most important one in Docker. It creates a new container from a specified image and then starts it.
+
+Let's run a container from our `alpine` image. We'll also tell the container to execute a simple command for us: `ls -l`, which lists the files in the root directory _inside_ the container.
+
+In your terminal, run this:
+
+Bash
+
+```
+docker run alpine ls -l
+```
+
+You'll see a list of directories like `bin`, `etc`, `home`, and `usr`. This is the filesystem _inside_ the Alpine Linux container, not on your own machine.
+
+Here's what just happened:
+
+1. Docker created a new container from the `alpine` image.
+    
+2. It ran the command `ls -l` inside that container.
+    
+3. After the command finished, the container stopped because it had nothing else to do.
+    
+
+---
+
+## Checking on Your Containers: `docker ps`
+
+So, where did the container go? The `docker ps` command shows you all the containers that are currently **running**.
+
+Try it now:
+
+Bash
+
+```
+docker ps
+```
+
+You'll likely see an empty list. This is because our container stopped as soon as its `ls -l` job was done.
+
+To see **all** containers, including stopped ones, you need to add the `-a` flag.
+
+Bash
+
+```
+docker ps -a
+```
+
+Now you'll see your container listed, along with a status like "Exited (0) ... ago". This confirms you created and ran a container.
+
+
+
